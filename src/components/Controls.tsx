@@ -2,13 +2,23 @@ import React from 'react';
 import Palette from './Palette/Palette';
 import Preview from './Preview';
 
-  class Controls extends React.Component {
-    // TODO load place/visibility of widgets
+export enum POSITION{
+  TOP_LEFT = 315,    TOP_CENTER = 0,      TOP_RIGHT = 45,
+  CENTER_LEFT= 270,                       CENTER_RIGHT = 90,
+  BOTTOM_LEFT = 215, BOTTOM_CENTER = 180, BOTTOM_RIGHT = 135 
+}
 
+export default  class Controls extends React.Component {
+    /*
+      this.state = {
+      position: 90,
+      size: 25,
+      values: ["#ff0000", "#ffff00", "#00ff00", "#00ffff", "#0000ff"],
+      settings: false
+    }
+    */
     state = {
-      topLeft: {
-        palette: <Palette />
-      },
+      topLeft: {},
       topCenter: {},
       topRight: {},
       centerLeft: {},
@@ -16,9 +26,24 @@ import Preview from './Preview';
       centerRight: {},
       bottomLeft: {},
       bottomCenter: {},
-      bottomRight: { 
-        preview: <Preview/>
-      },
+      bottomRight: {},
+    }
+
+    componentDidMount(){
+      // load / default parameters
+
+      this.setState({
+        topLeft: {
+          palette: <Palette 
+            position={POSITION.TOP_LEFT} 
+            size={25}
+            values={["#ff0000", "#ffff00", "#00ff00", "#00ffff", "#0000ff"]}
+          />
+        },
+        bottomRight: { 
+          preview: <Preview/>
+        },
+      })
     }
 
     render(){
@@ -43,5 +68,3 @@ import Preview from './Preview';
       );
     }
 }
-
-export default Controls;

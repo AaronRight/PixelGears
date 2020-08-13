@@ -2,30 +2,30 @@ import React from 'react';
 import { PaletteSettings } from './PaletteSettings';
 import ViewTable from './ViewTable';
 import ViewRow from './ViewRow';
+import { POSITION } from '../Controls'
 
 export type PaletteState = {
   setState: Function
   state: any
 }
 
-/*
-Possible positions:
-315 000 045  
-270     090  
-215 180 135
-*/
+export type PaletteParameters = {
+  position: number,
+  size: number,
+  values: Array<string>
+}
 
-export default class Palette extends React.Component {
-  constructor(props: any) {
+export default class Palette extends React.Component<PaletteParameters> {
+  constructor(props: PaletteParameters) {
     super(props);
     this.showSettings = this.showSettings.bind(this);
     this.setState = this.setState.bind(this);
   }
 
   state = {
-    position: 90,
-    size: 25,
-    values: ["#ff0000", "#ffff00", "#00ff00", "#00ffff", "#0000ff"],
+    position: this.props.position,
+    size: this.props.size,
+    values: this.props.values,
     settings: false
   }
 
@@ -36,7 +36,12 @@ export default class Palette extends React.Component {
       <div className="Palette">
         {this.state.settings && <PaletteSettings setState={this.setState} state={this.state} />}
         {
-          [45, 135, 215, 315].includes(this.state.position) ?
+          [ 
+            POSITION.BOTTOM_RIGHT, 
+            POSITION.BOTTOM_LEFT, 
+            POSITION.TOP_LEFT, 
+            POSITION.TOP_RIGHT
+          ].includes(this.state.position) ?
             <ViewTable setState={this.setState} state={this.state} /> :
             <ViewRow setState={this.setState} state={this.state} />
         }
