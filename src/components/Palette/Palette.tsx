@@ -10,31 +10,30 @@ export type PaletteState = {
 }
 
 export type PaletteParameters = {
-  position: number,
+  position: string,
   size: number,
-  values: Array<string>
+  values: Array<string>,
+  setPosition: Function
 }
 
 export default class Palette extends React.Component<PaletteParameters> {
   constructor(props: PaletteParameters) {
     super(props);
-    this.showSettings = this.showSettings.bind(this);
     this.setState = this.setState.bind(this);
   }
 
   state = {
-    position: this.props.position,
+    position: this.props.position as POSITION,
     size: this.props.size,
+    choosed: '',
     values: this.props.values,
     settings: false
   }
 
   render() {
-    let showSettings = this.showSettings;
-
     return (
       <div className="Palette">
-        {this.state.settings && <PaletteSettings setState={this.setState} state={this.state} />}
+        {this.state.settings && <PaletteSettings setState={this.setState} state={this.state} setPosition={this.props.setPosition}/>}
         {
           [ 
             POSITION.BOTTOM_RIGHT, 
@@ -47,9 +46,5 @@ export default class Palette extends React.Component<PaletteParameters> {
         }
       </div>
     );
-  }
-
-  showSettings() {
-    this.setState((state: any) => { return { settings: !state.settings } });
   }
 }

@@ -2,69 +2,121 @@ import React from 'react';
 import Palette from './Palette/Palette';
 import Preview from './Preview';
 
-export enum POSITION{
-  TOP_LEFT = 315,    TOP_CENTER = 0,      TOP_RIGHT = 45,
-  CENTER_LEFT= 270,                       CENTER_RIGHT = 90,
-  BOTTOM_LEFT = 215, BOTTOM_CENTER = 180, BOTTOM_RIGHT = 135 
+export enum POSITION {
+  TOP_LEFT = 'topLeft', TOP_CENTER = 'topCenter', TOP_RIGHT = 'topRight',
+  CENTER_LEFT = 'centerLeft', CENTER_RIGHT = 'centerRight',
+  BOTTOM_LEFT = 'bottomLeft', BOTTOM_CENTER = 'bottomCenter', BOTTOM_RIGHT = 'bottomRight'
 }
 
-export default  class Controls extends React.Component {
-    /*
-      this.state = {
-      position: 90,
-      size: 25,
-      values: ["#ff0000", "#ffff00", "#00ff00", "#00ffff", "#0000ff"],
-      settings: false
-    }
-    */
-    state = {
-      topLeft: {},
-      topCenter: {},
-      topRight: {},
-      centerLeft: {},
-      center: {},
-      centerRight: {},
-      bottomLeft: {},
-      bottomCenter: {},
-      bottomRight: {},
-    }
+export default class Controls extends React.Component {
+  constructor(props: any) {
+    super(props);
+    this.setPosition = this.setPosition.bind(this);
+  }
 
-    componentDidMount(){
-      // load / default parameters
+  state = {
+    palette: POSITION.TOP_LEFT,
+    preview: POSITION.BOTTOM_RIGHT
+  }
 
-      this.setState({
-        topLeft: {
-          palette: <Palette 
-            position={POSITION.TOP_LEFT} 
-            size={25}
-            values={["#ff0000", "#ffff00", "#00ff00", "#00ffff", "#0000ff"]}
-          />
-        },
-        bottomRight: { 
-          preview: <Preview/>
-        },
-      })
-    }
+  setPosition(newPosition: POSITION) {
+    this.setState({ palette: newPosition });
+  }
 
-    render(){
-      return (
-        <div className="Controls">
-          <div className="ControlRow">
-      <div  style={{ justifyContent: 'flex-start', alignItems: 'flex-start' }} className="ControlCell"> { Object.values(this.state.topLeft) } </div>
-            <div  style={{ justifyContent: 'center', alignItems: 'flex-start' }} className="ControlCell"> { Object.values(this.state.topCenter) } </div>
-            <div  style={{ justifyContent: 'flex-end', alignItems: 'flex-start' }} className="ControlCell"> { Object.values(this.state.topRight) } </div>
+  componentDidMount() {
+    // load / default parameters
+
+    this.setState({
+      topLeft: {
+        palette: <Palette
+          setPosition={this.setPosition}
+          position={POSITION.TOP_LEFT}
+          size={25}
+          values={["#ff0000", "#ffff00", "#00ff00", "#00ffff", "#0000ff"]}
+        />
+      },
+      bottomRight: {
+        preview: <Preview />
+      },
+    })
+  }
+
+  render() {
+    return (
+      <div className="Controls">
+        <div className="ControlRow">
+          <div style={{ justifyContent: 'flex-start', alignItems: 'flex-start' }} className="ControlCell">
+            {this.state.palette === POSITION.TOP_LEFT && <Palette
+              setPosition={this.setPosition}
+              position={POSITION.TOP_LEFT}
+              size={25}
+              values={["#ff0000", "#ffff00", "#00ff00", "#00ffff", "#0000ff"]}
+            />}
           </div>
-          <div className="ControlRow">
-            <div  style={{ justifyContent: 'flex-start', alignItems: 'center' }} className="ControlCell">  { Object.values(this.state.centerLeft) }  </div>
-            <div  style={{ justifyContent: 'center', alignItems: 'center' }} className="ControlCell">  { Object.values(this.state.center) } </div>
-            <div  style={{ justifyContent: 'flex-end', alignItems: 'center' }} className="ControlCell">  { Object.values(this.state.centerRight) } </div>
+          <div style={{ justifyContent: 'center', alignItems: 'flex-start' }} className="ControlCell">
+            {this.state.palette === POSITION.TOP_CENTER && <Palette
+              setPosition={this.setPosition}
+              position={POSITION.TOP_CENTER}
+              size={25}
+              values={["#ff0000", "#ffff00", "#00ff00", "#00ffff", "#0000ff"]}
+            />}
           </div>
-          <div className="ControlRow">
-            <div  style={{ justifyContent: 'flex-start', alignItems: 'flex-end' }} className="ControlCell">   { Object.values(this.state.bottomLeft) }  </div>
-            <div  style={{ justifyContent: 'center', alignItems: 'flex-end' }} className="ControlCell">   { Object.values(this.state.bottomCenter) }  </div>
-            <div  style={{ justifyContent: 'flex-end', alignItems: 'flex-end' }} className="ControlCell">  { Object.values(this.state.bottomRight) } </div>
+          <div style={{ justifyContent: 'flex-end', alignItems: 'flex-start' }} className="ControlCell">
+            {this.state.palette === POSITION.TOP_RIGHT && <Palette
+              setPosition={this.setPosition}
+              position={POSITION.TOP_RIGHT}
+              size={25}
+              values={["#ff0000", "#ffff00", "#00ff00", "#00ffff", "#0000ff"]}
+            />}
           </div>
         </div>
-      );
-    }
+        <div className="ControlRow">
+          <div style={{ justifyContent: 'flex-start', alignItems: 'center' }} className="ControlCell">
+            {this.state.palette === POSITION.CENTER_LEFT && <Palette
+              setPosition={this.setPosition}
+              position={POSITION.CENTER_LEFT}
+              size={25}
+              values={["#ff0000", "#ffff00", "#00ff00", "#00ffff", "#0000ff"]}
+            />}
+          </div>
+          <div style={{ justifyContent: 'center', alignItems: 'center' }} className="ControlCell">
+          </div>
+          <div style={{ justifyContent: 'flex-end', alignItems: 'center' }} className="ControlCell">
+            {this.state.palette === POSITION.CENTER_RIGHT && <Palette
+              setPosition={this.setPosition}
+              position={POSITION.CENTER_RIGHT}
+              size={25}
+              values={["#ff0000", "#ffff00", "#00ff00", "#00ffff", "#0000ff"]}
+            />}
+          </div>
+        </div>
+        <div className="ControlRow">
+          <div style={{ justifyContent: 'flex-start', alignItems: 'flex-end' }} className="ControlCell">
+          {this.state.palette === POSITION.BOTTOM_LEFT && <Palette
+              setPosition={this.setPosition}
+              position={POSITION.BOTTOM_LEFT}
+              size={25}
+              values={["#ff0000", "#ffff00", "#00ff00", "#00ffff", "#0000ff"]}
+            />}
+            </div>
+          <div style={{ justifyContent: 'center', alignItems: 'flex-end' }} className="ControlCell">
+          {this.state.palette === POSITION.BOTTOM_CENTER && <Palette
+              setPosition={this.setPosition}
+              position={POSITION.BOTTOM_CENTER}
+              size={25}
+              values={["#ff0000", "#ffff00", "#00ff00", "#00ffff", "#0000ff"]}
+            />}
+             </div>
+          <div style={{ justifyContent: 'flex-end', alignItems: 'flex-end' }} className="ControlCell">
+          {this.state.palette === POSITION.BOTTOM_RIGHT && <Palette
+              setPosition={this.setPosition}
+              position={POSITION.BOTTOM_RIGHT}
+              size={25}
+              values={["#ff0000", "#ffff00", "#00ff00", "#00ffff", "#0000ff"]}
+            />}
+             </div>
+        </div>
+      </div>
+    );
+  }
 }

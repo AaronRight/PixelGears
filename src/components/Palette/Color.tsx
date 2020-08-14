@@ -1,15 +1,35 @@
 import React from 'react';
+import useLongPress from "../../directives/useLongPress";
 
 type ColorState = {
   color: string
-  size: number
+  size: number,
+  choosed?: boolean,
+  onLongPress: Function,
+  onClick: Function
 }
 
-const Color = (parameters: ColorState) =>  <div style={{
-        background: parameters.color,
-        border: '1px solid black',
-        width: parameters.size,
-        height: parameters.size
-      }} className="Color"></div>
+export default function Color(parameters: ColorState) {
+  const defaultOptions = {
+    shouldPreventDefault: true,
+    delay: 500,
+  };
 
-export default Color;
+  let style:any = {
+    background: parameters.color,
+    width: parameters.size,
+    height: parameters.size
+  }
+
+  if(parameters.choosed){
+    style['border'] = '3px solid black';
+    style['margin'] = '-2px';
+  }else
+    style['border'] = '1px solid black';
+
+  return (<div 
+    style={style} 
+    {...useLongPress(parameters.onLongPress, () => parameters.onClick(parameters.color), defaultOptions)} 
+    className="Color">
+    </div>)
+}

@@ -1,0 +1,184 @@
+<html>
+  <head>
+    <style>
+      body {
+        background-color: white;
+        background-image: linear-gradient(
+            45deg,
+            grey 25%,
+            transparent 25%,
+            transparent 74%,
+            grey 75%,
+            grey
+          ),
+          linear-gradient(
+            45deg,
+            grey 25%,
+            transparent 25%,
+            transparent 74%,
+            grey 75%,
+            grey
+          );
+        background-size: 24px 24px;
+        background-position: 0 0, 12px 12px;
+      }
+      table {
+        background: white;
+      }
+      .cell {
+        width: 25px;
+        height: 25px;
+        border: 1px solid darkgrey;
+        margin: 2px;
+      }
+
+      .input_container{
+        height: 20px;
+        width: 20px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        margin: 4px;
+      }
+
+      .input_cell{
+        height: 15px;
+        width: 15px;
+        border: 1px solid darkgrey;
+        cursor: pointer;
+      }
+
+      .input {
+        display: none;
+      }
+
+      .input:checked ~ .input_cell {
+        border: 5px solid darkgrey;
+      }
+
+      td{
+        border-left: 1px solid black;
+      }
+    </style>
+
+    <meta charset="UTF-8" />
+    <script>
+      var pallets;
+
+      function loadJSON(callback) {
+        var xobj = new XMLHttpRequest();
+        xobj.overrideMimeType('application/json');
+        xobj.open('GET', 'pallets.json', true); // Replace 'my_data' with the path to your file
+        xobj.onreadystatechange = function() {
+          if (xobj.readyState == 4 && xobj.status == '200') {
+            // Required use of an anonymous callback as .open will NOT return a value but simply returns undefined in asynchronous mode
+            callback(xobj.responseText);
+          }
+        };
+        xobj.send(null);
+      }
+
+      function init() {
+        loadJSON(function(response) {
+          pallets = JSON.parse(response);
+          ReactDOM.render(
+            React.createElement(Control),
+            document.querySelector('#example'),
+          );
+        });
+      }
+    </script>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/react/15.4.2/react.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/react/15.4.2/react-dom.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/babel-standalone/6.21.1/babel.min.js"></script>
+    <script type="text/babel">
+      /*React.createElement( type,  [props],  [...children] )*/
+      class Control extends React.Component {
+        constructor(props) {
+          super(props);
+          this.state = {};
+        }
+
+        render() {
+          return (
+            <table>
+              <thead>
+                <tr>
+                  <th>Id</th>
+                  <th>Colors</th>
+                  <th>Marks</th>
+                  <th>Description</th>
+                </tr>
+              </thead>
+              <tbody>
+                {pallets.map(i => (
+                  <ControlBar pallete={i} key={i.id} />
+                ))}
+              </tbody>
+            </table>
+          );
+        }
+      }
+
+      class ControlBar extends React.Component {
+        constructor(props) {
+          super(props);
+        }
+
+        render() {
+          return (
+            <tr>
+              <td>{this.props.pallete.id}</td>
+              <td style={{display: 'flex', flexDirection: 'row', alignItems: 'center'}}>
+                {this.props.pallete.colors.map((i, c) => (
+                  <Cell color={i} key={c} />
+                ))}
+              </td>
+              <td> <ColorPanel marks={this.props.pallete.marks}/></td>
+              <td> <div style={{height: '25px', overflow: 'auto'}}> {this.props.pallete.description} </div> </td>
+            </tr>
+          );
+        }
+      }
+
+      class ColorPanel extends React.Component{
+        colors = [ 'red', 'orange','yellow','green','aqua','blue','pink','purple','brown','grey','white','black']
+       
+        render() {
+          //return React.createElement('div',{style: {display: 'flex', flexDirection: 'row'}},elements,);
+          return (
+            <div style={{display: 'flex', flexDirection: 'row'}}>
+              { this.colors.map( (i) =>  (<div className="input_container" key={i}>
+                  <label>
+                      <input  className="input" type="checkbox" checked={ this.props.marks.includes(i) }/> 
+                      <div className="input_cell"  style={{background: i}}></div>
+                    </label>
+                </div> )
+                )
+              }
+            </div>
+          );
+        }
+      }
+
+      class Cell extends React.Component {
+        constructor(props) {
+          super(props);
+          this.state = {};
+        }
+
+        render() {
+          return React.createElement(
+            'div',
+            {className: 'cell', style: {background: this.props.color}},
+            [],
+          );
+        }
+      }
+    </script>
+  </head>
+  <body onload="init()">
+    <div id="example"></div>
+  </body>
+</html>
